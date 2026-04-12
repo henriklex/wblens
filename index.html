@@ -151,8 +151,8 @@
   }
 
   .feature-icon {
-    font-size: 28px;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
+    color: var(--orange);
   }
 
   .feature h3 {
@@ -211,7 +211,18 @@
 <section class="hero">
   <div class="hero-text">
     <div class="app-badge">
-      <div class="app-icon">🔲</div>
+      <div class="app-icon">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="4" y="4" width="8" height="2" fill="#ff9a32"/>
+          <rect x="4" y="4" width="2" height="8" fill="#ff9a32"/>
+          <rect x="16" y="4" width="8" height="2" fill="#ff9a32"/>
+          <rect x="22" y="4" width="2" height="8" fill="#ff9a32"/>
+          <rect x="4" y="22" width="8" height="2" fill="#ff9a32"/>
+          <rect x="4" y="16" width="2" height="8" fill="#ff9a32"/>
+          <rect x="16" y="22" width="8" height="2" fill="#ff9a32"/>
+          <rect x="22" y="16" width="2" height="8" fill="#ff9a32"/>
+        </svg>
+      </div>
       <span class="app-name">Whiteboard Lens</span>
     </div>
 
@@ -246,17 +257,36 @@
 <!-- FEATURES -->
 <section class="features">
   <div class="feature">
-    <div class="feature-icon">📐</div>
+    <div class="feature-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+        <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+        <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+        <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+        <rect x="7" y="7" width="10" height="10" rx="1"/>
+      </svg>
+    </div>
     <h3>Auto-detect &amp; correct</h3>
     <p>Finds the whiteboard in the frame and corrects the perspective automatically. Point, tap, done.</p>
   </div>
   <div class="feature">
-    <div class="feature-icon">🎨</div>
+    <div class="feature-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M12 3a9 9 0 0 1 0 18" fill="currentColor" stroke="none"/>
+        <line x1="12" y1="3" x2="12" y2="21"/>
+      </svg>
+    </div>
     <h3>Color or B&amp;W</h3>
     <p>Keep your marker colors for context, or strip them for a clean monochrome output ready to share.</p>
   </div>
   <div class="feature">
-    <div class="feature-icon">🔒</div>
+    <div class="feature-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="2" width="14" height="20" rx="2"/>
+        <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2.5"/>
+      </svg>
+    </div>
     <h3>Stays on your device</h3>
     <p>No account. No subscription. No cloud upload. Your scans go nowhere you didn't choose to send them.</p>
   </div>
