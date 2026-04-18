@@ -1,0 +1,43 @@
+name: Fetch Dashboard Data
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'  # Every Monday 7am UTC
+  workflow_dispatch:       # Allow manual trigger
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install PyJWT cryptography requests
+
+      - name: Fetch all data sources
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+          ASC_VENDOR_NUMBER: ${{ secrets.ASC_VENDOR_NUMBER }}
+          ASA_CLIENT_ID: ${{ secrets.ASA_CLIENT_ID }}
+          ASA_TEAM_ID: ${{ secrets.ASA_TEAM_ID }}
+          ASA_KEY_ID: ${{ secrets.ASA_KEY_ID }}
+          ASA_PRIVATE_KEY: ${{ secrets.ASA_PRIVATE_KEY }}
+        run: python3 .github/scripts/fetch_data.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add dashboard/dashboard-data.json
+          git diff --staged --quiet || git commit -m "chore: update dashboard data [skip ci]"
+          git push

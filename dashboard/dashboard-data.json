@@ -1,0 +1,66 @@
+{
+  "updated": null,
+  "acquisition": {
+    "7d": {
+      "downloads": null,
+      "impressions": null,
+      "pageViews": null,
+      "conversionRate": null,
+      "sources": { "asa": null, "organic": null, "web": null }
+    },
+    "30d": {
+      "downloads": null,
+      "impressions": null,
+      "pageViews": null,
+      "conversionRate": null,
+      "sources": { "asa": null, "organic": null, "web": null }
+    }
+  },
+  "asa": {
+    "7d": { "totalSpend": null, "keywords": [] },
+    "30d": { "totalSpend": null, "keywords": [] }
+  },
+  "productHealth": {
+    "rating": null,
+    "reviewCount": null,
+    "prevWeekReviewCount": null,
+    "latestReviews": []
+  },
+  "reddit": [
+    {
+      "subreddit": "r/microsoft",
+      "threadId": "1s5tgdn",
+      "title": "Microsoft Lens",
+      "score": null,
+      "url": "https://www.reddit.com/r/microsoft/comments/1s5tgdn/"
+    },
+    {
+      "subreddit": "r/microsoft",
+      "threadId": "1qbpz5u",
+      "title": "Enraged at the retirement of Microsoft Lens",
+      "score": null,
+      "url": "https://www.reddit.com/r/microsoft/comments/1qbpz5u/"
+    },
+    {
+      "subreddit": "r/OneNote",
+      "threadId": "1q9tf6r",
+      "title": "Office lens retirement — scanning to OneNote",
+      "score": null,
+      "url": "https://www.reddit.com/r/OneNote/comments/1q9tf6r/"
+    },
+    {
+      "subreddit": "r/ios",
+      "threadId": "1ryowra",
+      "title": "End of an era: Microsoft Lens officially retired",
+      "score": null,
+      "url": "https://www.reddit.com/r/ios/comments/1ryowra/"
+    },
+    {
+      "subreddit": "r/SideProject",
+      "threadId": "1skmsxn",
+      "title": "I built a free whiteboard scanner (our post)",
+      "score": null,
+      "url": "https://www.reddit.com/r/SideProject/comments/1skmsxn/"
+    }
+  ]
+}
