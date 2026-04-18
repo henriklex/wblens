@@ -28,6 +28,8 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_PRIVATE_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
           ASC_VENDOR_NUMBER: ${{ secrets.ASC_VENDOR_NUMBER }}
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
           ASA_CLIENT_ID: ${{ secrets.ASA_CLIENT_ID }}
           ASA_TEAM_ID: ${{ secrets.ASA_TEAM_ID }}
           ASA_KEY_ID: ${{ secrets.ASA_KEY_ID }}

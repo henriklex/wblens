@@ -9,11 +9,13 @@ Required environment variables:
   ASC_PRIVATE_KEY  — Contents of the .p8 private key file
 
 Optional:
-  ASC_VENDOR_NUMBER — Vendor number for Sales Reports (find in ASC > Payments & Financial Reports)
-  ASA_CLIENT_ID     — Apple Search Ads OAuth client ID
-  ASA_TEAM_ID       — Apple Search Ads team ID
-  ASA_KEY_ID        — Apple Search Ads API key ID
-  ASA_PRIVATE_KEY   — Apple Search Ads API private key
+  ASC_VENDOR_NUMBER  — Vendor number for Sales Reports (find in ASC > Payments & Financial Reports)
+  REDDIT_CLIENT_ID   — Reddit script app client ID (create at reddit.com/prefs/apps, type: script)
+  REDDIT_CLIENT_SECRET — Reddit script app secret
+  ASA_CLIENT_ID      — Apple Search Ads OAuth client ID
+  ASA_TEAM_ID        — Apple Search Ads team ID
+  ASA_KEY_ID         — Apple Search Ads API key ID
+  ASA_PRIVATE_KEY    — Apple Search Ads API private key
 """
 
 import gzip
@@ -93,16 +95,19 @@ def asc_get(path: str, token: str, params: dict = None) -> dict:
     return resp.json()
 
 
-def fetch_app_rating(token: str) -> tuple[Optional[float], Optional[int]]:
-    """Returns (average_rating, total_review_count)."""
+def fetch_app_rating() -> tuple[Optional[float], Optional[int]]:
+    """Returns (average_rating, total_review_count) via iTunes public lookup API."""
     try:
-        data = asc_get(
-            f"/v1/apps/{APP_ID}",
-            token,
-            params={"fields[apps]": "averageUserRating,userRatingCount"},
+        resp = requests.get(
+            f"https://itunes.apple.com/lookup?id={APP_ID}",
+            timeout=15,
         )
-        attrs = data["data"]["attributes"]
-        return attrs.get("averageUserRating"), attrs.get("userRatingCount")
+        resp.raise_for_status()
+        data = resp.json()
+        if data.get("resultCount", 0) > 0:
+            r = data["results"][0]
+            return r.get("averageUserRating"), r.get("userRatingCount")
+        return None, None
     except Exception as e:
         print(f"  [WARN] fetch_app_rating failed: {e}")
         return None, None
@@ -228,22 +233,61 @@ def find_comment_score(comments_data: list, username: str) -> Optional[int]:
     return None
 
 
-def fetch_reddit_score(subreddit_name: str, thread_id: str) -> Optional[int]:
-    """Fetch our comment score from a Reddit thread."""
-    # Strip r/ prefix for URL
-    sub = subreddit_name.lstrip("r/")
-    url = f"https://www.reddit.com/r/{sub}/comments/{thread_id}.json"
-    headers = {"User-Agent": "dashboard-bot/1.0 (Whiteboard Lens marketing dashboard)"}
+_reddit_token: Optional[str] = None
+
+
+def get_reddit_oauth_token() -> Optional[str]:
+    """Get Reddit OAuth token using client credentials (read-only public data)."""
+    global _reddit_token
+    if _reddit_token:
+        return _reddit_token
+
+    client_id = os.environ.get("REDDIT_CLIENT_ID", "")
+    client_secret = os.environ.get("REDDIT_CLIENT_SECRET", "")
+    if not client_id or not client_secret:
+        return None
 
     try:
-        resp = requests.get(url, headers=headers, timeout=15)
+        resp = requests.post(
+            "https://www.reddit.com/api/v1/access_token",
+            auth=requests.auth.HTTPBasicAuth(client_id, client_secret),
+            data={"grant_type": "client_credentials"},
+            headers={"User-Agent": f"whiteboard-lens-dashboard/1.0 by /u/{REDDIT_USERNAME}"},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        _reddit_token = resp.json().get("access_token")
+        return _reddit_token
+    except Exception as e:
+        print(f"  [WARN] Reddit OAuth failed: {e}")
+        return None
+
+
+def fetch_reddit_score(subreddit_name: str, thread_id: str) -> Optional[int]:
+    """Fetch our comment score from a Reddit thread."""
+    sub = subreddit_name.lstrip("r/")
+    ua = f"whiteboard-lens-dashboard/1.0 by /u/{REDDIT_USERNAME}"
+
+    oauth_token = get_reddit_oauth_token()
+    if oauth_token:
+        base_url = f"https://oauth.reddit.com/r/{sub}/comments/{thread_id}"
+        headers = {
+            "Authorization": f"bearer {oauth_token}",
+            "User-Agent": ua,
+        }
+    else:
+        print(f"  [INFO] No Reddit OAuth — trying public API (may fail from datacenter IPs)")
+        base_url = f"https://www.reddit.com/r/{sub}/comments/{thread_id}"
+        headers = {"User-Agent": ua}
+
+    try:
+        resp = requests.get(base_url + ".json", headers=headers, timeout=15)
         if resp.status_code == 429:
             print(f"  [WARN] Reddit rate limited for {thread_id}")
             return None
         resp.raise_for_status()
         listing = resp.json()
 
-        # Reddit returns [post_listing, comments_listing]
         if len(listing) < 2:
             return None
 
@@ -296,9 +340,9 @@ def main():
     print("Generating App Store Connect token…")
     token = generate_asc_token(key_id, issuer_id, private_key)
 
-    # ── App rating + reviews ──
+    # ── App rating (public iTunes API, no auth needed) ──
     print("Fetching app rating…")
-    rating, review_count = fetch_app_rating(token)
+    rating, review_count = fetch_app_rating()
     print(f"  Rating: {rating}, Reviews: {review_count}")
 
     print("Fetching latest reviews…")
