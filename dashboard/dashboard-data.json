@@ -1,5 +1,5 @@
 {
-  "updated": "2026-04-18T10:06:08Z",
+  "updated": "2026-04-18T10:08:32Z",
   "acquisition": {
     "7d": {
       "downloads": null,
@@ -35,8 +35,8 @@
     }
   },
   "productHealth": {
-    "rating": null,
-    "reviewCount": null,
+    "rating": 0,
+    "reviewCount": 0,
     "prevWeekReviewCount": null,
     "latestReviews": []
   },
