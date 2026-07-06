@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-29T12:00:38Z",
+  "updated": "2026-07-06T11:26:11Z",
   "acquisition": {
     "7d": {
       "downloads": null,
@@ -38,14 +38,7 @@
     "rating": 5,
     "reviewCount": 1,
     "prevWeekReviewCount": null,
-    "latestReviews": [
-      {
-        "rating": 5,
-        "author": "Dctrkw",
-        "title": "Works!",
-        "body": "After MSLens retired I was struggling to find an app to save whiteboards as jpg\u2019s on my phone. Many apps save pdfs, but my workflow needs jpg\u2019s. So glad this works well."
-      }
-    ]
+    "latestReviews": []
   },
   "reddit": [
     {
